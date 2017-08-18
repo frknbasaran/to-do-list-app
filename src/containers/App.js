@@ -3,31 +3,39 @@ import {connect} from 'react-redux';
 import * as authActions from '../redux/modules/auth';
 import * as taskActions from '../redux/modules/task';
 import {bindActionCreators} from 'redux';
-import {withRouter, Route, Switch, Link} from 'react-router-dom';
+import {withRouter, Route, Switch} from 'react-router-dom';
 
 import EditTask from './EditTask';
 import CreateTask from './CreateTask';
 import ListTask from './ListTask';
 
+import Header from './Header';
+import Content from './Content';
+import Footer from './Footer';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+import '../assets/css/main.css';
+
+
 class App extends React.Component {
 
-    componentDidMount(){
-        console.log(this.props);
+    componentDidMount() {
+
     }
 
     render() {
         return (
-            <div>
-                <p>To Do List App w/ React</p>
-                <Link to={{pathname: '/'}}>All Tasks</Link>
-                <Link to={{pathname: '/new-task'}}>Create New Task</Link>
-                <Switch>
-                    <Route exact path="/" component={ListTask}/>
-                    <Route exact path="/new-task" component={CreateTask}/>
-                    <Route exact path="/edit-task/:id" component={EditTask}/>
-                </Switch>
-
-                <button onClick={()=>this.props.login('gox','123')}>Login</button>
+            <div className="App">
+                <Header/>
+                <Content>
+                    <Switch>
+                        <Route exact path="/" component={ListTask}/>
+                        <Route path="/new-task" component={CreateTask}/>
+                        <Route path="/edit-task/:id" component={EditTask}/>
+                    </Switch>
+                </Content>
+                <Footer/>
             </div>
         );
     }
@@ -37,10 +45,7 @@ const mapStateToProps = state => {
     return {
         isLogged: state.auth.isLogged,
         isLoadingAuth: state.auth.isLoading,
-        user:state.auth.user,
-        isLoadingTask: state.task.isLoading,
-        task:state.task.task,
-        tasks:state.task.tasks
+        user: state.auth.user
     }
 }
 

@@ -1,0 +1,31 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.u-align-center {
+    text-align: center;
+    display: block;
+}
+
+.Footer {
+    color: silver;
+    flex-shrink: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.Loader {
+    height: 75px;
+    margin-top: 300px;
+}
+
+.App {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.Content {
+    min-height: 85vh;
+}

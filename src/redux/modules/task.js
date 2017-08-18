@@ -1,3 +1,5 @@
+import constants from '../../constants';
+
 // Actions
 const GET_TASKS = 'tasks/GET_TASKS';
 const TASKS_TAKEN = 'tasks/TASKS_TAKEN';
@@ -10,7 +12,9 @@ const DELETED_TASK = 'tasks/DELETED_TASKS';
 const FAILED = 'tasks/REQUEST_FAILED';
 
 let initialState = {
-    isLoading: false
+    isLoading: false,
+    tasks: [],
+    task: {id: 0, title: ""}
 }
 
 // Reducer
@@ -18,35 +22,42 @@ export default function reducer(state = initialState, action = {}) {
     switch (action.type) {
         case GET_TASKS:
             return {
+                ...state,
                 isLoading: true
             }
         case TASKS_TAKEN:
             return {
+                ...state,
                 isLoading: false,
-                tasks: action.tasks
+                tasks: action.result
             }
         case CREATE_TASK:
             return {
+                ...state,
                 isLoading: true,
-                task: action.task
+                task: action.result
             }
         case CREATED_TASK:
             return {
+                ...state,
                 isLoading: false,
-                task: action.task
+                task: action.result
             }
         case EDIT_TASK:
             return {
+                ...state,
                 isLoading: true,
-                task: action.task
+                task: action.result
             }
         case EDITED_TASK:
             return {
+                ...state,
                 isLoading: false,
-                task: action.task
+                task: action.result
             }
         case FAILED:
             return {
+                ...state,
                 isLoading: false
             }
         default:
@@ -58,7 +69,7 @@ export function getTasks() {
     return {
         types: [GET_TASKS, TASKS_TAKEN, FAILED],
         promise: (client) => {
-            return client.get('/tasks');
+            return client.get(constants.apiRoot + constants.tasks.getAll);
         }
     }
 }
@@ -67,7 +78,7 @@ export function createTask({id, title}) {
     return {
         types: [CREATE_TASK, CREATED_TASK, FAILED],
         promise: (client) => {
-            return client.post('/tasks', {id,title})
+            return client.post('/tasks', {id, title})
         }
     }
 }
@@ -76,7 +87,7 @@ export function editTask({id, title}) {
     return {
         types: [EDIT_TASK, EDITED_TASK, FAILED],
         promise: (client) => {
-            return client.put('/tasks/'+id, {id,title})
+            return client.put('/tasks/' + id, {id, title})
         }
     }
 }
@@ -85,7 +96,7 @@ export function removeTask(id) {
     return {
         types: [DELETE_TASK, DELETED_TASK, FAILED],
         promise: (client) => {
-            return client.delete('/tasks/'+id);
+            return client.delete('/tasks/' + id);
         }
     }
 }

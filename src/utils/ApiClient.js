@@ -3,8 +3,7 @@ import superagent from 'superagent';
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
 function formatUrl(path) {
-    const adjustedPath = path[0] !== '/' ? '/' + path : path;
-    return '/api' + adjustedPath;
+    return path;
 }
 
 export default class ApiClient {
@@ -22,7 +21,7 @@ export default class ApiClient {
                 }
 
                 request.end((err, {body} = {}) => {
-                    return err ? reject(body || err) : resolve(body)
+                    return err ? reject(body || err) : resolve(body.data)
                 });
             }));
     }
