@@ -4,7 +4,6 @@ import {bindActionCreators} from 'redux';
 import * as taskActions from '../redux/modules/task';
 import {ListGroup, ListGroupItem} from 'react-bootstrap';
 import {ContextMenu, MenuItem, ContextMenuTrigger} from "react-contextmenu";
-import {Redirect} from 'react-router';
 
 import loader from '../assets/img/loader.gif';
 import 'react-contextmenu/public/styles.5bb557.css';

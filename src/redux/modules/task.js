@@ -115,7 +115,7 @@ export function createTask({id, title}) {
     }
 }
 
-export function editTask({id, title}) {
+export function editTask(id, title) {
     return {
         types: [EDIT_TASK, EDITED_TASK, FAILED],
         promise: (client) => {
