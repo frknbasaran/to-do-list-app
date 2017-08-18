@@ -1,14 +1,19 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
 import * as taskActions from '../redux/modules/task';
 import {bindActionCreators} from 'redux';
 
 class EditTask extends React.Component {
 
+    componentDidMount() {
+        this.props.getTask(this.props.match.params.id);
+    }
+
     render() {
         return (
             <div>
-                <h1>Edit Task Page {this.props.task}</h1>
+                <h1>Edit {this.props.task.title}</h1>
             </div>
         );
     }
@@ -26,4 +31,4 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(taskActions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditTask);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditTask));

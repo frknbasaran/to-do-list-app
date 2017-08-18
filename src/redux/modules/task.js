@@ -3,6 +3,8 @@ import constants from '../../constants';
 // Actions
 const GET_TASKS = 'tasks/GET_TASKS';
 const TASKS_TAKEN = 'tasks/TASKS_TAKEN';
+const GET_TASK = 'tasks/GET_TASK';
+const TASK_TAKEN = 'tasks/TASK_TAKEN';
 const CREATE_TASK = 'tasks/CREATE_TASK';
 const EDIT_TASK = 'tasks/EDIT_TASK';
 const CREATED_TASK = 'tasks/CREATED_TASK';
@@ -10,14 +12,13 @@ const EDITED_TASK = 'tasks/EDITED_TASK';
 const DELETE_TASK = 'tasks/DELETE_TASK';
 const DELETED_TASK = 'tasks/DELETED_TASKS';
 const FAILED = 'tasks/REQUEST_FAILED';
-const START_EDIT = 'tasks/START_EDIT';
+
 
 let initialState = {
     isLoading: false,
     tasks: [],
     task: {},
-    taskCreated: false,
-    startEdit: false
+    taskCreated: false
 }
 
 // Reducer
@@ -29,17 +30,22 @@ export default function reducer(state = initialState, action = {}) {
                 isLoading: true,
                 taskCreated: false
             }
-        case START_EDIT:
+        case GET_TASK:
             return {
                 ...state,
-                task: action.task,
-                startEdit: true
+                isLoading: true
             }
         case TASKS_TAKEN:
             return {
                 ...state,
                 isLoading: false,
                 tasks: action.result
+            }
+        case TASK_TAKEN:
+            return {
+                ...state,
+                isLoading: false,
+                task: action.result
             }
         case CREATE_TASK:
             return {
@@ -53,6 +59,12 @@ export default function reducer(state = initialState, action = {}) {
                 isLoading: false,
                 taskCreated: true,
                 task: action.result
+            }
+        case DELETED_TASK:
+            return {
+                ...state,
+                isLoading: false,
+                tasks: action.result
             }
         case EDIT_TASK:
             return {
@@ -85,6 +97,15 @@ export function getTasks() {
     }
 }
 
+export function getTask(id) {
+    return {
+        types: [GET_TASK, TASK_TAKEN, FAILED],
+        promise: (client) => {
+            return client.get(constants.apiRoot + constants.tasks.getOne + id);
+        }
+    }
+}
+
 export function createTask({id, title}) {
     return {
         types: [CREATE_TASK, CREATED_TASK, FAILED],
@@ -107,15 +128,7 @@ export function removeTask(id) {
     return {
         types: [DELETE_TASK, DELETED_TASK, FAILED],
         promise: (client) => {
-            return client.delete(constants.apiRoot + constants.tasks.delete + id);
+            return client.del(constants.apiRoot + constants.tasks.delete + id);
         }
-    }
-}
-
-export function startEdit(id) {
-    return {
-        type: START_EDIT,
-        startEdit: true,
-        task: {id}
     }
 }

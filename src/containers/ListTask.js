@@ -20,13 +20,13 @@ class ListTask extends React.Component {
         return {id: props.item};
     }
 
-    handleClick(e, data, target) {
+    handleClick = (e, data, target) => {
         if (data.action === 'delete') {
             this.props.removeTask(data.id);
         }
 
         if (data.action === 'edit') {
-            this.props.startEdit();
+            this.props.history.push('edit-task/' + data.id)
         }
     }
 
@@ -72,8 +72,7 @@ const mapStateToProps = state => {
     return {
         isLoadingTask: state.task.isLoading,
         task: state.task.task,
-        tasks: state.task.tasks,
-        startEdit: state.task.startEdit
+        tasks: state.task.tasks
     }
 }
 
