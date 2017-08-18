@@ -10,11 +10,14 @@ const EDITED_TASK = 'tasks/EDITED_TASK';
 const DELETE_TASK = 'tasks/DELETE_TASK';
 const DELETED_TASK = 'tasks/DELETED_TASKS';
 const FAILED = 'tasks/REQUEST_FAILED';
+const START_EDIT = 'tasks/START_EDIT';
 
 let initialState = {
     isLoading: false,
     tasks: [],
-    task: {id: 0, title: ""}
+    task: {},
+    taskCreated: false,
+    startEdit: false
 }
 
 // Reducer
@@ -23,7 +26,14 @@ export default function reducer(state = initialState, action = {}) {
         case GET_TASKS:
             return {
                 ...state,
-                isLoading: true
+                isLoading: true,
+                taskCreated: false
+            }
+        case START_EDIT:
+            return {
+                ...state,
+                task: action.task,
+                startEdit: true
             }
         case TASKS_TAKEN:
             return {
@@ -41,6 +51,7 @@ export default function reducer(state = initialState, action = {}) {
             return {
                 ...state,
                 isLoading: false,
+                taskCreated: true,
                 task: action.result
             }
         case EDIT_TASK:
@@ -78,7 +89,7 @@ export function createTask({id, title}) {
     return {
         types: [CREATE_TASK, CREATED_TASK, FAILED],
         promise: (client) => {
-            return client.post('/tasks', {id, title})
+            return client.post(constants.apiRoot + constants.tasks.create, {title});
         }
     }
 }
@@ -87,7 +98,7 @@ export function editTask({id, title}) {
     return {
         types: [EDIT_TASK, EDITED_TASK, FAILED],
         promise: (client) => {
-            return client.put('/tasks/' + id, {id, title})
+            return client.put(constants.apiRoot + constants.tasks.edit + id, {id, title})
         }
     }
 }
@@ -96,7 +107,15 @@ export function removeTask(id) {
     return {
         types: [DELETE_TASK, DELETED_TASK, FAILED],
         promise: (client) => {
-            return client.delete('/tasks/' + id);
+            return client.delete(constants.apiRoot + constants.tasks.delete + id);
         }
+    }
+}
+
+export function startEdit(id) {
+    return {
+        type: START_EDIT,
+        startEdit: true,
+        task: {id}
     }
 }

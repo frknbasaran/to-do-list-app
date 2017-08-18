@@ -1,48 +1,65 @@
 import React from 'react';
-import {FormControl, FormGroup, ControlLabel, HelpBlock} from 'react-bootstrap';
+import {FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import * as taskActions from '../redux/modules/task';
 import {bindActionCreators} from 'redux';
+import {Redirect} from 'react-router';
+import loader from '../assets/img/loader.gif';
 
 class CreateTask extends React.Component {
 
-    componentDidMount() {
-        console.log(this.props);
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            task: {title: ''}
+        };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+
     getValidationState() {
-        /*
-        const length = this.props.task.title.value.length;
+        const length = this.state.task.title.length
         if (length > 10) return 'success';
         else if (length > 5) return 'warning';
         else if (length > 0) return 'error';
-        */
     }
 
-    handleChange(e) {
-        this.setState(this.props.task, {id: this.props.task.id, title: e.target.value});
+
+    handleChange(event) {
+        this.setState({task: {"title": event.target.value}});
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.props.createTask(this.state.task)
     }
 
     render() {
         return (
             <div>
                 <h1>Create Task</h1>
-                <form>
+                {this.props.taskCreated ? <Redirect to="/"/> : null}
+                <div className="u-align-center">
+                    {this.props.isLoadingTask ? <img className="Loader" alt="Loading..." src={loader}/> : null}
+                </div>
+                {!this.props.isLoadingTask ? <form onSubmit={this.handleSubmit}>
                     <FormGroup
-                        controlId="formBasicText"
+                        controlId="createTaskForm"
                         validationState={this.getValidationState()}
                     >
-                        <ControlLabel>Working example with validation</ControlLabel>
+                        <ControlLabel>Task title must be larger than 10 character.</ControlLabel>
                         <FormControl
                             type="text"
-                            value={this.props.task.title}
-                            placeholder="Enter title for your task"
+                            value={this.state.task.title}
+                            placeholder="Enter your task title"
                             onChange={this.handleChange}
                         />
                         <FormControl.Feedback/>
-                        <HelpBlock>Validation is based on string length.</HelpBlock>
                     </FormGroup>
-                </form>
+                </form> : null}
             </div>
         );
     }
@@ -50,8 +67,8 @@ class CreateTask extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        isLoadingTask: state.task.isLoadingTask,
-        task: state.task.task
+        isLoadingTask: state.task.isLoading,
+        taskCreated: state.task.taskCreated
     }
 }
 
