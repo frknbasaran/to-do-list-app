@@ -30,3 +30,12 @@ export default function reducer(state = initialState, action = {}) {
         default: return state;
     }
 }
+
+export function login(username,password){
+    return {
+        types:[LOGIN,LOGIN_SUCCESS,LOGIN_FAILED],
+        promise: (client)=>{
+            return client.post('/login',{data :{username,password}})
+        }
+    }
+}
