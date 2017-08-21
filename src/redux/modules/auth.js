@@ -4,8 +4,8 @@ const LOGIN_SUCCESS = 'auth/LOGIN_SUCCESS';
 const LOGIN_FAILED = 'auth/LOGIN_FAILED';
 
 let initialState = {
-    isLogged:false,
-    isLoading:false
+    isLogged: false,
+    isLoading: false
 }
 
 // Reducer
@@ -31,11 +31,11 @@ export default function reducer(state = initialState, action = {}) {
     }
 }
 
-export function login(username,password){
+export function login(username, password) {
     return {
-        types:[LOGIN,LOGIN_SUCCESS,LOGIN_FAILED],
-        promise: (client)=>{
-            return client.post('/login',{data :{username,password}})
+        types:[LOGIN, LOGIN_SUCCESS, LOGIN_FAILED],
+        promise: (client) => {
+            return client.post('/login', { data : {username,password} })
         }
     }
 }
