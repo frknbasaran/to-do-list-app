@@ -7,12 +7,11 @@ export default function httpMiddleware(client) {
             }
 
             const {promise, types, ...rest} = action;
+
             if (!promise) {
-                // normal action
                 return next(action);
             }
 
-            // auto loading-success-failure management
             const [REQUEST, SUCCESS, FAILURE] = types;
             next({...rest, type: REQUEST});
 
